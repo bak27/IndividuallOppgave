@@ -1,0 +1,137 @@
+<header>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</header>
+<div class="navbar navbar-inverse navbar-fixed-top" style="background-color:black; font-size:18px">
+  <div class="container">
+    <div class="navbar-header">
+      <img src="./assets/images/Logo.PNG" width="80" height="49" />
+      <img src="./assets/images/tog.PNG" width="400" height="49" />
+      <img src="./assets/images/tog2.PNG" width="400" height="49" />
+     
+    </div>
+   
+  </div>
+</div>
+<div style="position:center">
+  <h1>  Velkommen til VY-FAQ side</h1>
+</div>
+<table>
+  <tr>
+
+    <td>
+      <button (click)='visFAQ()' style="color: #fff; background-color: #1E88E5; width: 300px; ">FAQ om Billet og Pris</button>
+    </td>
+
+    <td>
+      <button (click)='visAvgangFAQ()' style="color: #fff; background-color: #FF5733 ; width: 300px; ">FAQ om Avganger og Strekninger</button>
+    </td>
+   
+    <td><button (click)='registrerFAQs()' style="color: #fff; background-color: #4CAF50; width: 300px;">Register ny Spørsmål</button></td>
+  </tr>
+</table>
+<div>
+  <div class="col-md-6 col-md-offset-1" *ngIf="visFAQsListe">
+
+    <table>
+      <tbody *ngFor='let value of alleFAQs'>
+        <tr>
+          <td>
+            <button class="accordion" (click)="hentSvar(value.id)" style="color: #fff; background-color: #A6F7F3;  width: 300px; color: black; ">
+              {{value.quetions}}
+            </button>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="col-md-6 col-md-offset-1" *ngIf="visSvarListe">
+      <table>
+        <tbody *ngFor='let value of svar'>
+          <tr>
+            <td>{{value.answers}}</td>
+            <td>
+              <button type="button" class="btn btn-sm btn-success"><i class="fa fa-thumbs-up" (click)="thumbup(value.id);hentSvar(value.id)"></i> </button>
+              <p>{{value.thumbsUp}}</p>
+            </td>
+
+            <td>
+              <button type="button" class="btn btn-sm btn-danger"><i class="fa fa-thumbs-down" (click)="thumbdown(value.id);hentSvar(value.id)"></i></button>
+              <p>{{value.thumbsDown}}</p>
+            </td>
+
+          </tr>
+      </table>
+    </div>
+  </div>
+  <div class="col-md-6 col-md-offset-1" *ngIf="visAvgangFAQsListe">
+    <table>
+      <tbody *ngFor='let value of alleAfaqs'>
+        <tr>
+          <td>
+            <button class="accordion" (click)="hentAvgangsvar(value.id)" style="color: #fff; background-color: #BCF7A6; width: 300px; color: black; ">{{value.quetions}}</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="col-md-6 col-md-offset-1" *ngIf="visSvarListe">
+      <table>
+        <tbody *ngFor='let value of svaret'>
+          <tr>
+            <td>{{value.answers}}</td>
+
+            <td>
+              <button type="button" class="btn btn-sm btn-success"><i class="fa fa-thumbs-up" (click)="thumbUp(value.id);hentAvgangsvar(value.id)"></i> </button>
+              <p>{{value.thumbsUp}}</p>
+            </td>
+
+            <td>
+              <button type="button" class="btn btn-sm btn-danger"><i class="fa fa-thumbs-down" (click)="thumbDown(value.id);hentAvgangsvar(value.id)"></i></button>
+              <p>{{value.thumbsDown}}</p>
+            </td>
+
+          </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-sm-4" *ngIf="visSkjema">
+    <form [formGroup]="skjema" (ngSubmit)="vedSubmit()">
+      <input class="form-control" formControlName="id" type="hidden" />
+      <div class="form-group">
+        <label>Navn</label>
+        <input class="form-control" formControlName="navn" />
+        <p class="alert alert-warning" [hidden]="skjema.controls.navn.valid || (skjema.controls.navn.pristine && !submitted)">
+          Navn er obligatorisk.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label>Epost</label>
+        <input class="form-control" formControlName="epost" placeholder="eksample@yahoo.com" />
+        <p class="alert alert-warning" [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
+          Epost er obligatorisk,og må være slik eksample@yahoo.com.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label>Quetions</label>
+        <textarea class="form-control" formControlName="quetions"> </textarea>
+        <p class="alert alert-warning" [hidden]="skjema.controls.quetions.valid || (skjema.controls.quetions.pristine && !submitted)">
+          Quetion er obligatorisk.
+        </p>
+      </div>
+      <div class="form-group">
+        <button type="submit" *ngIf="skjemaStatus=='Registrere'" [disabled]="!skjema.valid" (click)="melding()" class="btn btn-primary">Registrer</button>
+        <button class="btn btn-default" (click)="tilbakeTilListe()">Tilbake</button>
+      </div>
+    </form>
+
+  </div>
+  <div id="melding" *ngIf="visMelding">
+    <h5>Tusen takk for at du tar tid for å stille spørsmål og vi prøver å svar for ditt spørsmål så snart som mulig.</h5>
+    <button class="btn btn-primary" (click)="tilbakeTilListe()">Tilbake</button>
+  </div>
+</div>
+
